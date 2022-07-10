@@ -92,7 +92,7 @@
               <dt class="text-sm font-medium text-gray-500 truncate">
                 {{ t.name }} - USD
               </dt>
-              <dd class="mt-1 text-3xl font-semibold text-gray-900">
+              <dd class="mt-1 text-2xl font-semibold text-gray-900">
                 {{ formatPrice(t.price) }}
               </dd>
             </div>
@@ -128,7 +128,7 @@
             v-for="(bar, idx) in normalizeGraph()"
             :key="idx"
             :style="{ height: `${bar}%` }"
-            class="bg-purple-800 border w-10"
+            class="bg-purple-800 border w-10 transition duration-300 ease-in-out"
           ></div>
         </div>
         <button
@@ -164,7 +164,7 @@
 </template>
 
 <script>
-import { subscribeToTicker, unsubscribeFromTicker } from "./api"
+import { subscribeToTicker, unsubscribeFromTicker } from "./ws"
 
 export default {
   name: "App",
@@ -181,8 +181,6 @@ export default {
 
       page: 1,
       elementsInPage: 6,
-      
-      listOFTickers: []
     };
   },
 
@@ -192,25 +190,6 @@ export default {
         return price;
       }
       return price > 1 ? price.toFixed(2) : price.toPrecision(2);
-    },
-
-    updateTicker(tickerName, price) {
-      this.tickers
-        .filter(t => t.name === tickerName)
-        .forEach(t => {
-          t.price = price;
-          if(t === this.selectedTicker){
-            this.graph.push(price ? price : 50);
-            if(this.graph.length >= 50){
-              this.graph.splice(0, 1)
-            }
-            if(window.visualViewport.width < 700){
-              if(this.graph.length >= 30){
-                this.graph.splice(0, 1)
-              }
-            }
-          }
-        });
     },
 
     add() {
@@ -225,6 +204,25 @@ export default {
       subscribeToTicker(currentTicker.name, newPrice => 
           this.updateTicker(currentTicker.name, newPrice)
       );
+    },
+
+    updateTicker(tickerName, price) {
+      this.tickers
+        .filter(t => t.name === tickerName)
+        .forEach(t => {
+          t.price = price;
+          if(t === this.selectedTicker){
+            this.graph.push(price ? price : 50);
+            if(this.graph.length === 50){
+              this.graph.splice(0, 1)
+            }
+            if(window.visualViewport.width < 700){
+              if(this.graph.length === 25){
+                this.graph.splice(0, 1)
+              }
+            }
+          }
+        });
     },
 
     select(ticker) {
@@ -249,6 +247,7 @@ export default {
         price => 5 + ((price - minValue) * 95) / (maxValue - minValue)
       );
     },
+
   },
 
   created() {

@@ -1,4 +1,5 @@
-# cryptoapp
+# 4Coin
+#site: https://4coin.netlify.app/
 
 ## Project setup
 ```

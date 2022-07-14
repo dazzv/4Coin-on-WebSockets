@@ -1,5 +1,5 @@
 # 4Coin
-#site: https://4coin.netlify.app/
+site: https://4coin.netlify.app/
 
 ## Project setup
 ```

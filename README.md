@@ -1,5 +1,6 @@
 # 4Coin
 site: https://4coin.netlify.app/
+![4CoinImage](https://raw.githubusercontent.com/dazzv/4Coin-on-WebSockets/main/cryptoApp.PNG))
 
 ## Project setup
 ```
